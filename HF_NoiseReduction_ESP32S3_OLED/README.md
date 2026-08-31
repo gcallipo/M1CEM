@@ -459,11 +459,6 @@ SRAM (typically 512 KB), with no PSRAM required for the core pipeline.
 
 ## 9. Testing & Validation
 
-This project could not be compiled against the real Xtensa/ESP-IDF
-toolchain in the environment it was written in (network policy blocks the
-Espressif toolchain/package download servers). To compensate, every
-numerically-critical piece was validated independently before being
-assembled into the final sketch:
 
 - **Real FFT (forward + inverse)**: derived by hand, first checked against
   NumPy's `rfft`/`irfft` in Python (exact to double-precision round-off for
