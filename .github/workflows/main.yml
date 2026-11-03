@@ -1,10 +1,10 @@
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
     paths-ignore:
       - "latest_build_firmware/**"
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -58,7 +58,7 @@ jobs:
           git add -A latest_build_firmware
           if ! git diff --cached --quiet; then
             git commit -m "Update latest firmware build"
-            git push
+            git push origin HEAD:refs/heads/main
           fi
 
       - name: Upload firmware binaries
