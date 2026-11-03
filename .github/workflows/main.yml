@@ -1,9 +1,14 @@
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - "latest_build_firmware/**"
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   compile:
@@ -41,6 +46,20 @@ jobs:
             --output-dir ./firmware-build \
             --export-binaries \
             ./HF_NoiseReduction_ESP32S3_OLED
+
+      - name: Store latest firmware binary in the repository
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        run: |
+          mkdir -p latest_build_firmware
+          rm -f latest_build_firmware/*.bin
+          cp firmware-build/*.bin latest_build_firmware/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A latest_build_firmware
+          if ! git diff --cached --quiet; then
+            git commit -m "Update latest firmware build"
+            git push
+          fi
 
       - name: Upload firmware binaries
         uses: actions/upload-artifact@v4
