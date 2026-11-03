@@ -18,8 +18,8 @@ jobs:
 
       - name: Installa il Core ESP32 (Versione 3.x richiesta)
         run: |
-          arduino-cli core update-index --additional-urls https://github.io
-          arduino-cli core install esp32:esp32@3.0.7 --additional-urls https://github.io
+          arduino-cli core update-index --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core install esp32:esp32@3.0.7 --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
           # Nota: Abbiamo forzato la versione 3.x (es. 3.0.7) come richiesto dai driver I2S del progetto
 
       - name: Compila lo Sketch Arduino
