@@ -1,0 +1,30 @@
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch: # Permette l'avvio manuale dalla scheda Actions
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Controlla il codice sorgente
+        uses: actions/checkout@v4
+
+      - name: Configura l'ambiente Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Installa il Core ESP32 (Versione 3.x richiesta)
+        run: |
+          arduino-cli core update-index --additional-urls https://github.io
+          arduino-cli core install esp32:esp32@3.0.7 --additional-urls https://github.io
+          # Nota: Abbiamo forzato la versione 3.x (es. 3.0.7) come richiesto dai driver I2S del progetto
+
+      - name: Compila lo Sketch Arduino
+        uses: arduino/compile-sketches@v1
+        with:
+          fqbn: "esp32:esp32:esp32s3" # Fully Qualified Board Name per ESP32-S3 Dev Module
+          sketch-paths: "./HF_NoiseReduction_ESP32S3_OLED"
+          enable-deltas-report: true
