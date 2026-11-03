@@ -30,6 +30,6 @@ jobs:
           sketch-paths: "./HF_NoiseReduction_ESP32S3_OLED"
           enable-deltas-report: true
           libraries: |
-            Adafruit GFX Library
-            Adafruit BusIO
-            Adafruit SH110X
+            - name: Adafruit GFX Library
+            - name: Adafruit BusIO
+            - name: Adafruit SH110X
