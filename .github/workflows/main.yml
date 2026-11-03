@@ -3,28 +3,33 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch: # Permette l'avvio manuale dalla scheda Actions
+  workflow_dispatch:
 
 jobs:
   compile:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Controlla il codice sorgente
+      - name: Check out source code
         uses: actions/checkout@v4
 
-      - name: Configura l'ambiente Arduino CLI
+      - name: Set up Arduino CLI
         uses: arduino/setup-arduino-cli@v2
 
-      - name: Installa il Core ESP32 (Versione 3.x richiesta)
+      - name: Install ESP32 core and required libraries
         run: |
           arduino-cli core update-index --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
-          arduino-cli core install esp32:esp32@3.0.7 --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
-          # Nota: Abbiamo forzato la versione 3.x (es. 3.0.7) come richiesto dai driver I2S del progetto
+          arduino-cli core install esp32:esp32@3.3.12 --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli lib update-index
+          arduino-cli lib install "Adafruit GFX Library" "Adafruit BusIO" "Adafruit SH110X"
 
-      - name: Compila lo Sketch Arduino
+      - name: Compile Arduino sketch
         uses: arduino/compile-sketches@v1
         with:
-          fqbn: "esp32:esp32:esp32s3" # Fully Qualified Board Name per ESP32-S3 Dev Module
+          fqbn: "esp32:esp32:esp32s3"
           sketch-paths: "./HF_NoiseReduction_ESP32S3_OLED"
           enable-deltas-report: true
+          libraries: |
+            Adafruit GFX Library
+            Adafruit BusIO
+            Adafruit SH110X
