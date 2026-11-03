@@ -33,3 +33,19 @@ jobs:
             - name: Adafruit GFX Library
             - name: Adafruit BusIO
             - name: Adafruit SH110X
+
+      - name: Build firmware binaries
+        run: |
+          arduino-cli compile \
+            --fqbn esp32:esp32:esp32s3 \
+            --output-dir ./firmware-build \
+            --export-binaries \
+            ./HF_NoiseReduction_ESP32S3_OLED
+
+      - name: Upload firmware binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: esp32-s3-firmware
+          path: firmware-build/*.bin
+          if-no-files-found: error
+          retention-days: 30
